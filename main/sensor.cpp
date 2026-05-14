@@ -9,9 +9,14 @@ void Sensor::update_raw_axes() {
     tx_data[0] = 0x80 | 0x40 | _data_reg; 
 
     spi_transaction_t t = {};
-    t.length = 7 * 8; 
-    t.tx_buffer = tx_data;
-    t.rx_buffer = rx_data;
+        t.flags = 0;
+        t.cmd = 0;
+        t.addr = 0;
+        t.length = 7 * 8;
+        t.rxlength = 0;
+        t.user = NULL;
+        t.tx_buffer = &tx_data;
+        t.rx_buffer = &rx_data;
 
 
     if (spi_device_polling_transmit(_spi_device, &t) == ESP_OK) {
@@ -32,11 +37,15 @@ uint8_t  Sensor::read_reg(uint8_t cmd){
     tx_data[1] = 0x00;
     uint8_t rx_data[2] ;    
 
-    spi_transaction_t t = {
-        .length = 16,            
-        .tx_buffer = &tx_data,  
-        .rx_buffer = &rx_data
-    };
+    spi_transaction_t t = {};
+        t.flags = 0;
+        t.cmd = 0;
+        t.addr = 0;
+        t.length = 16;
+        t.rxlength = 0;
+        t.user = NULL; 
+        t.tx_buffer = &tx_data; 
+        t.rx_buffer = &rx_data;
 
     if (spi_device_polling_transmit(_spi_device, &t) != ESP_OK) {
         std::cout << "Blad transmisji SPI!\n";

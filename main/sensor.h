@@ -13,9 +13,9 @@ struct SensorData3D {
 class Sensor : public SpiDevice {
 protected:
     SensorData3D data;
-    
     uint8_t _id_reg;
-    uint8_t _data_reg = 0x00;
+    uint8_t _data_reg = 0x00; 
+    virtual uint8_t read_reg(uint8_t reg);
 public:
     
     Sensor(spi_host_device_t host_id, int cs_pin, int clock_speed_hz, uint8_t mode, uint32_t flags, uint8_t id_reg)
@@ -25,9 +25,7 @@ public:
     }
 
     void update_raw_axes();
-    
-    uint8_t read_reg(uint8_t reg);
-    uint8_t read_id();
+    virtual uint8_t read_id();
     int16_t getX() const { return data.x; }
     int16_t getY() const { return data.y; }
     int16_t getZ() const { return data.z; }

@@ -375,10 +375,10 @@ extern "C" void  app_main(void){
     //bt_spp_server_init("ESP32_BT");
 
     while (1) {
-        	//printf("Wyslano: 0x00 | Odebrano z Device 3: 0x%02X\n", accel->read_id());
-        	//printf("Wyslano: 0x2C | Odebrano z Device 3: 0x%02X\n", accel->read_bw_tate());
+        	printf("Wyslano: 0x00 | Odebrano z Device 3: 0x%02X\n", accel->read_id());
+        	printf("Wyslano: 0x2C | Odebrano z Device 3: 0x%02X\n", accel->read_bw_tate());
             
-            //printf("Wyslano: 0x0F | Odebrano z Device 2: 0x%02X\n",gyroscope->read_id());
+            printf("Wyslano: 0x0F | Odebrano z Device 2: 0x%02X\n",gyroscope->read_id());
             accel->update_raw_axes();
             SensorData3D reading = accel->getData();
         

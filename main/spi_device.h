@@ -5,10 +5,10 @@
 class SpiDevice {
 protected:
     spi_device_handle_t _spi_device;
-
+    
+    virtual void write_reg(uint8_t reg, uint8_t value);
 public:
     SpiDevice(spi_host_device_t host_id, int cs_pin, int clock_speed_hz, uint8_t mode, uint32_t flags = 0);
     virtual ~SpiDevice();
 
-    virtual void write_reg(uint8_t reg, uint8_t value);
 };

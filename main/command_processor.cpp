@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <sstream>
 
-static int led_pin = GPIO_NUM_2;
 static adxl345* accel_ptr = nullptr;
 static l3g4200d* gyroscope_ptr = nullptr;
 

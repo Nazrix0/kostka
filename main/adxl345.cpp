@@ -9,6 +9,10 @@ adxl345::adxl345(spi_host_device_t host_id, int cs_pin)
 }
 
 
+uint8_t adxl345::read_bw_tate() {
+    return read_reg(BW_RATE);
+}
+
 void adxl345::init() {
     
     write_reg(REG_POWER_CTL, 0x00); 
