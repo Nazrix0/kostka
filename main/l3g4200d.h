@@ -13,11 +13,11 @@ class l3g4200d: public Sensor {
 
 private:
 
-	uint8_t _data_reg =  REG_OUT_X_L;
 	void write_reg(uint8_t cmd, uint8_t value);
-	
+	int16_t map(int16_t raw_val);
 public:
 	l3g4200d(spi_host_device_t host_id, int cs_pin);
+	
 	void init();
 };
 

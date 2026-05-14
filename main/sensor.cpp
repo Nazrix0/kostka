@@ -23,6 +23,9 @@ void Sensor::update_raw_axes() {
         data.x = (int16_t)(rx_data[1] | (rx_data[2] << 8));
         data.y = (int16_t)(rx_data[3] | (rx_data[4] << 8));
         data.z = (int16_t)(rx_data[5] | (rx_data[6] << 8));
+        data.x = map(data.x);
+        data.y = map(data.y);   
+        data.z = map(data.z);
     }
 }
 uint8_t Sensor::read_id(){

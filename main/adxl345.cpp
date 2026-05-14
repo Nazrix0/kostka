@@ -6,6 +6,7 @@
 adxl345::adxl345(spi_host_device_t host_id, int cs_pin) 
     : Sensor(host_id, cs_pin, 1000000, 3, 0, 0x00) 
 {
+    this->_data_reg =  REG_DATAX0;
 }
 
 
@@ -23,7 +24,7 @@ void adxl345::init() {
     
 }
 
-int16_t adxl345::axis_to_0_15(int16_t v){
+int16_t adxl345::map(int16_t v){
     int32_t scaled = ((int32_t)v + 512) * 15 / 1024;
     
     if (scaled < 0) scaled = 0;

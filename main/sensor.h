@@ -16,6 +16,7 @@ protected:
     uint8_t _id_reg;
     uint8_t _data_reg = 0x00; 
     virtual uint8_t read_reg(uint8_t reg);
+    virtual int16_t map(int16_t raw_val) = 0;
 public:
     
     Sensor(spi_host_device_t host_id, int cs_pin, int clock_speed_hz, uint8_t mode, uint32_t flags, uint8_t id_reg)
