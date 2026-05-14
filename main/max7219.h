@@ -1,6 +1,7 @@
 #pragma once
 
 #include "driver/spi_master.h"
+#include "spi_device.h"
 
 #define DECODE_MODE_REG     0x09
 #define INTENSITY_REG       0x0A
@@ -13,22 +14,18 @@
 #ifndef MAIN_MAX7219_H_
 #define MAIN_MAX7219_H_
 
-class max7219 {
+class max7219: public SpiDevice {
 private:
-	spi_device_handle_t _spi_device;
-    void write_reg(uint8_t reg, uint8_t value);
+	void max7219_init();
 public:
-
-	max7219(int cs_pin,spi_host_device_t host_id);
+	max7219(spi_host_device_t host_id, int cs_pin);
 	virtual ~max7219();
 	void set_row(uint8_t device, uint8_t row_index, uint8_t value);
 	void set_col(uint8_t device, uint8_t col_index, uint8_t value);
 	void set_intensity(uint8_t col_index);
-	void max7219_init();
 	void clear_single_display(uint8_t display_num);
 	void clear();
 	void write_reg_device(uint8_t device,uint8_t reg,uint8_t value);
-	 
 };
 
 #endif

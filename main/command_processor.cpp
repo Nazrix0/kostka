@@ -2,6 +2,7 @@
 #include "driver/gpio.h"
 #include "adxl345.h"
 #include "l3g4200d.h"
+#include "sensor.h"
 #include <cstdlib>
 #include <sstream>
 
@@ -29,8 +30,9 @@ std::string processCommand(const std::string& command) {
 
      if (command == "SPI_ADXL345:GET") {
         if (accel_ptr != nullptr) {
-            AccelData reading = accel_ptr->read_all_axes();
-            GyroData reading1 = gyroscope_ptr->read_all_axes();
+
+            SensorData3D reading = accel_ptr->getData();
+            SensorData3D reading1 = gyroscope_ptr->getData();
             std::ostringstream oss;
             oss << "x: " << reading.x << " y: " << reading.y << " z: " << reading.z
             << " xg: " << reading1.x << " yg: " << reading1.y << " zg: " << reading1.z; 

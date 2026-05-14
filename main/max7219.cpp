@@ -2,53 +2,26 @@
 #include <cstring>
 
 
-max7219::max7219(int cs_pin,spi_host_device_t host_id) {
-    
-        spi_device_interface_config_t devcfg={};
-        devcfg.clock_speed_hz = 10000000;  
-        devcfg.mode = 0;                 
-        devcfg.spics_io_num = cs_pin;
-        devcfg.queue_size = 1;
-        devcfg.flags = SPI_DEVICE_HALFDUPLEX;
-        devcfg.pre_cb = NULL;
-        devcfg.post_cb = NULL;
-		ESP_ERROR_CHECK(spi_bus_add_device(host_id, &devcfg, &_spi_device));
-		
-		max7219_init();
-    
-}
-
-
-max7219::~max7219() {
-	
-}
-
-void max7219::write_reg(uint8_t reg, uint8_t value) {
-    uint8_t tx_data[2] = { reg, value };
-    
-    spi_transaction_t t;
-    memset(&t, 0, sizeof(t));
-    
-    t.tx_buffer = tx_data;
-    t.length = 16;
-
-    ESP_ERROR_CHECK(spi_device_polling_transmit(_spi_device, &t));
+max7219::max7219(spi_host_device_t host_id, int cs_pin) : SpiDevice(host_id, cs_pin, 10000000, 0, SPI_DEVICE_HALFDUPLEX) 
+{
+    max7219_init();
 }
 
 void max7219::max7219_init(){
-	    for (uint8_t d = 0; d < MAX7219_DEVICES; d++) {
-        write_reg_device(d, SHUTDOWN_REG,     0x01);//Wyjście z trybu uśpienia
-        write_reg_device(d, DISPLAY_TEST_REG, 0x00);// Wyłączenie trybu 
-        write_reg_device(d, SCAN_LIMIT_REG,   0x07);// Ustawienie liczby skanowanych wierszy 
-        write_reg_device(d, DECODE_MODE_REG,  0x00);// Brak dekodowania BCD 
-        write_reg_device(d, INTENSITY_REG,    0x15); // Ustawienie maksymalnej jasności
-    }	
-    
+	     
+        write_reg( SHUTDOWN_REG,     0x01);//Wyjście z trybu uśpienia
+        write_reg( DISPLAY_TEST_REG, 0x00);// Wyłączenie trybu 
+        write_reg( SCAN_LIMIT_REG,   0x07);// Ustawienie liczby skanowanych wierszy 
+        write_reg( DECODE_MODE_REG,  0x00);// Brak dekodowania BCD 
+        write_reg( INTENSITY_REG,    0x15); // Ustawienie maksymalnej jasności
+
 	    clear();                           
 		clear();
 	
 }
+max7219::~max7219() {
 
+}
 void max7219::clear(){
     for (uint8_t row = 0; row < 8; row++) {
         for (uint8_t device = 0; device < MAX7219_DEVICES; device++) {
@@ -92,7 +65,7 @@ void max7219::set_col(uint8_t device, uint8_t col_index, uint8_t value) {
     }
 }
 
-void max7219::write_reg_device(uint8_t device,uint8_t reg,uint8_t value){
+void max7219::write_reg_device(uint8_t device, uint8_t reg, uint8_t value){
     if (device >= MAX7219_DEVICES) return;
 
     uint8_t tx_data[MAX7219_DEVICES * 2];

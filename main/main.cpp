@@ -20,6 +20,7 @@
 #include "esp_event.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "sensor.h"
 
 
 #include "max7219.h"
@@ -357,9 +358,9 @@ extern "C" void  app_main(void){
     
 
     spi_bus_initialize(VSPI_HOST, &buscfg, SPI_DMA_CH_AUTO);
-    display1 = new max7219(CS1_PIN,VSPI_HOST);
-    accel = new adxl345(CS3_PIN,VSPI_HOST);
-    gyroscope = new l3g4200d(CS2_PIN,VSPI_HOST);
+    display1 = new max7219(VSPI_HOST, CS1_PIN);
+    accel = new adxl345(VSPI_HOST, CS3_PIN);
+    gyroscope = new l3g4200d(VSPI_HOST, CS2_PIN);
     accel->init();
     gyroscope->init();
     display1->clear();
@@ -374,12 +375,12 @@ extern "C" void  app_main(void){
     //bt_spp_server_init("ESP32_BT");
 
     while (1) {
-        	printf("Wyslano: 0x00 | Odebrano z Device 3: 0x%02X\n", accel->read_id());
-        	printf("Wyslano: 0x2C | Odebrano z Device 3: 0x%02X\n", accel->read_bw_tate());
+        	//printf("Wyslano: 0x00 | Odebrano z Device 3: 0x%02X\n", accel->read_id());
+        	//printf("Wyslano: 0x2C | Odebrano z Device 3: 0x%02X\n", accel->read_bw_tate());
             
-            printf("Wyslano: 0x0F | Odebrano z Device 2: 0x%02X\n",gyroscope->read_id());
-
-            AccelData reading = accel->read_all_axes();
+            //printf("Wyslano: 0x0F | Odebrano z Device 2: 0x%02X\n",gyroscope->read_id());
+            accel->update_raw_axes();
+            SensorData3D reading = accel->getData();
         
             int x = reading.x; 
             int y = reading.y; 
@@ -389,7 +390,7 @@ extern "C" void  app_main(void){
                   << " Y: " << y 
                   << " Z: " << z << std::endl;
 
-            GyroData reading1 = gyroscope->read_all_axes();
+            SensorData3D reading1 = gyroscope->getData();
             std::cout << "GX: " << reading1.x 
                   << " GY: " << reading1.y 
                   << " GZ: " << reading1.z << std::endl;
