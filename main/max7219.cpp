@@ -13,7 +13,7 @@ void max7219::max7219_init(){
         write_reg( DISPLAY_TEST_REG, 0x00);// Wyłączenie trybu 
         write_reg( SCAN_LIMIT_REG,   0x07);// Ustawienie liczby skanowanych wierszy 
         write_reg( DECODE_MODE_REG,  0x00);// Brak dekodowania BCD 
-        write_reg( INTENSITY_REG,    0x15); // Ustawienie maksymalnej jasności
+        write_reg( INTENSITY_REG,    0x0F); // Ustawienie maksymalnej jasności
 
 
 	
@@ -70,11 +70,11 @@ void max7219::side_displays_col(int dx, int dy, int wall_pos, uint8_t display_nu
         if (height < 0) height = 0;
         if (height > 8) height = 8;
         
-        for (int row = 0; row < 8; row++) {
-            bool bit = (height <= 8) ? (row < height) : (row >= height - 8);
-            if (bit) _frame_buffer[display_num][row] |= (1 << col);
-            else     _frame_buffer[display_num][row] &= ~(1 << col);
+        int hw_value = height;
+        if (invert_hw && height > 0 && height < 8) {
+            hw_value = 16 - height;
         }
+        set_col(display_num, col, hw_value);
     }
 }
 
@@ -96,8 +96,6 @@ void max7219::side_displays_row(int dx, int dy, int wall_pos, uint8_t display_nu
         if (invert_hw && width > 0 && width < 8) {
             width = 16 - width; 
         }
-        
-
         set_row(display_num, row, width);
     }
 }
@@ -106,7 +104,7 @@ void max7219::set_display(uint8_t device) {
     if (device >= MAX7219_DEVICES) return;
 
     for (int row = 0; row < 8; row++) {
-        // Wartość 8 oznacza zapełnienie całego rzędu (8 diod)
+
         set_row(device, row, 8);
     }
 }

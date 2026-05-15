@@ -62,10 +62,7 @@ void d1(int x, int y, int z) {
     int ay = abs(dy);
     int az = abs(dz);
 
-    if (display1 != nullptr) {
-        display1->clear_bufor();
-        display1->update();
-    }
+    if (display1 != nullptr) display1->clear_bufor();
 
 
     if (az >= ax && az >= ay) {
@@ -140,6 +137,8 @@ void d2(int x, int y, int z) {
     int ay = abs(dy);
     int az = abs(dz);
 
+    if (display1 != nullptr) display1->clear_bufor();
+
     if (az >= ax && az >= ay) {
         if (inv_z >= MID) {
             display1->set_display(5); std::cout << "5";
@@ -212,10 +211,9 @@ void d3(int x, int y, int z, int gx, int gy, int gz) {
     int ay = std::abs(dy);
     int az = std::abs(dz);
 
-    if (display1 != nullptr) {
-        display1->clear_bufor();
-        display1->update();
-    }
+    if (display1 != nullptr) display1->clear_bufor();
+
+
     if (az >= ax && az >= ay) {
         if (z >= MID) {
             display1->set_display(5); std::cout << "5";
@@ -282,12 +280,12 @@ extern "C" void  app_main(void){
 
 
     spi_bus_config_t buscfg={};
-        buscfg.miso_io_num = MISO_PIN,
-        buscfg.mosi_io_num = MOSI_PIN,
-        buscfg.sclk_io_num = CLK_PIN,
-        buscfg.quadwp_io_num = -1,
-        buscfg.quadhd_io_num = -1,
-        buscfg.max_transfer_sz = 4092,
+        buscfg.miso_io_num = MISO_PIN;
+        buscfg.mosi_io_num = MOSI_PIN;
+        buscfg.sclk_io_num = CLK_PIN;
+        buscfg.quadwp_io_num = -1;
+        buscfg.quadhd_io_num = -1;
+        buscfg.max_transfer_sz = 4092;
     
 
     spi_bus_initialize(VSPI_HOST, &buscfg, SPI_DMA_CH_AUTO);
