@@ -358,7 +358,7 @@ extern "C" void  app_main(void){
             }
             display1->clear_bufor();
             
-            vTaskDelay(400/portTICK_PERIOD_MS);
+            vTaskDelay(20/portTICK_PERIOD_MS);
 
     }        
 }

@@ -19,6 +19,7 @@ private:
 	uint8_t _frame_buffer[MAX7219_DEVICES][8];
 	void max7219_init();
 	void write_reg_device(uint8_t device,uint8_t reg,uint8_t value);
+	void write_reg(uint8_t reg, uint8_t value) override;
 public:
 	max7219(spi_host_device_t host_id, int cs_pin);
 	virtual ~max7219();

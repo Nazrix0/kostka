@@ -13,13 +13,30 @@ void max7219::max7219_init(){
         write_reg( DISPLAY_TEST_REG, 0x00);// Wyłączenie trybu 
         write_reg( SCAN_LIMIT_REG,   0x07);// Ustawienie liczby skanowanych wierszy 
         write_reg( DECODE_MODE_REG,  0x00);// Brak dekodowania BCD 
-        write_reg( INTENSITY_REG,    0x0F); // Ustawienie maksymalnej jasności
+        write_reg( INTENSITY_REG,    0x01); // Ustawienie maksymalnej jasności
 
 
 	
 }
 max7219::~max7219() {
 
+}
+
+void max7219::write_reg(uint8_t reg, uint8_t value) {
+    uint8_t tx_data[MAX7219_DEVICES * 2];
+
+    // Wypełniamy bufor transmisyjny tak, aby do każdego układu w kaskadzie
+    // trafił ten sam rejestr i ta sama wartość.
+    for (int dev = 0; dev < MAX7219_DEVICES; dev++) {
+        tx_data[dev * 2] = reg;
+        tx_data[dev * 2 + 1] = value;
+    }
+
+    // Konfiguracja i wysłanie transakcji SPI
+    spi_transaction_t t = {};
+    t.tx_buffer = tx_data;
+    t.length = MAX7219_DEVICES * 16; // 16 bitów (2 bajty) na każde urządzenie
+    spi_device_polling_transmit(_spi_device, &t);
 }
 
 void max7219::set_intensity(uint8_t intensity){
